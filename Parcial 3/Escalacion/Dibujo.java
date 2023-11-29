@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 public class Dibujo extends JPanel implements Runnable {
     BufferedImage image = null;
 
-    int[] vectorProyeccion = { 8, 7, 50 };
+    int[] vectorProyeccion = { 8, 7, 20 };
     private float tx, ty, tz;
 
     //Puntos finales
