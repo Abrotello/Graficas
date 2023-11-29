@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 public class Ventana extends JPanel {
     
     private BufferedImage image;
-    private int[] vectorProyeccion = { 2, 2, 55 };
+    private int[] vectorProyeccion = { 20, 20, 800 };
 
     private int xcentro = 150;
     private int ycentro = 150;
@@ -21,7 +21,7 @@ public class Ventana extends JPanel {
         frame.add(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.setSize(500, 500);
+        frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
@@ -39,7 +39,7 @@ public class Ventana extends JPanel {
         int[] figuraY2 = new int[4];
         
         Cubo cubo = new Cubo();
-        image = new BufferedImage(500, 500, BufferedImage.TYPE_INT_RGB);
+        image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
 
         for(int i=0; i<8; i++) { 
             double u = calcularU(cubo.getPuntosZ()[i]);
@@ -50,11 +50,11 @@ public class Ventana extends JPanel {
             System.out.println("y: " + y + "\n");
 
             if(i < 4) {
-                figuraX1[i] = (int) (xcentro + (x*1)); 
-                figuraY1[i] = (int) (ycentro + (y*1));
+                figuraX1[i] = (int) ((x*1)); 
+                figuraY1[i] = (int) ((y*1));
             } else {
-                figuraX2[aux] = (int) (xcentro + (x*3));
-                figuraY2[aux] = (int) (ycentro + (y*3));
+                figuraX2[aux] = (int) ((x*1));
+                figuraY2[aux] = (int) ((y*1));
                 aux++;
             }
         }
