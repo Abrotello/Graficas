@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 public class Ventana extends JPanel {
     
     private BufferedImage image;
-    private int[] vectorProyeccion = { 2, 2, 5 };
+    private int[] vectorProyeccion = { 2, 2, 55 };
 
     private int xcentro = 150;
     private int ycentro = 150;
@@ -50,8 +50,8 @@ public class Ventana extends JPanel {
             System.out.println("y: " + y + "\n");
 
             if(i < 4) {
-                figuraX1[i] = (int) (xcentro + (x*3)); 
-                figuraY1[i] = (int) (ycentro + (y*3));
+                figuraX1[i] = (int) (xcentro + (x*1)); 
+                figuraY1[i] = (int) (ycentro + (y*1));
             } else {
                 figuraX2[aux] = (int) (xcentro + (x*3));
                 figuraY2[aux] = (int) (ycentro + (y*3));

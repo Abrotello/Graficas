@@ -1,35 +1,58 @@
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 public class Dibujo extends JPanel implements Runnable {
     BufferedImage image = null;
     
-    int[] vectorProyeccion = { 0, 0, 50 };
-    private int tx = 50, ty = 90, tz = 50;
+    int[] vectorProyeccion = { 2, 2, 55 };
+    private int tx, ty, tz;
 
-    private void calcularMovimiento() {
+    //Puntos finales
+    int[][] puntosFinales = new int[8][0];
 
-        /*
-         *
-         * 1. Calcular la proyeccion inicial de cada punto del cubo en 3D a 2D
-         * 
-         * 2. Calcular la posicion final de cada punto del cubo en 3D
-         * 
-         * 3. Calcular la proyeccion final de cada punto del cubo en 3D a 2D
-         * 
-         * 4. Incrementar los valores de la proyeccion inicial de cada punto del cubo hasta llegar al resultado final
-         * 
-         */
-
-    }
-
-    private void proyectar() {
-
+    ArrayList<Puntos> puntosXY = new ArrayList<>();
+    
+    private void drawCube() {
         Cubo cubo = new Cubo();
+        Transformacion3D transformacion3d = new Transformacion3D(tx, ty, tz);
+        
+        for(int i=0; i<puntosFinales.length; i++) {
+            puntosFinales[i] = transformacion3d.trasladar(cubo.getPuntosX()[i], cubo.getPuntosY()[i], cubo.getPuntosZ()[i]);
+            double u = calcularUParalela(puntosFinales[i][2], vectorProyeccion[2]);
+            double x = calcularXParalela(puntosFinales[i][0], u, vectorProyeccion[0]);
+            double y = calcularYParalela(puntosFinales[i][1], u, vectorProyeccion[1]);
 
+            proyectar((int)x, (int)y);
+        }
+    } 
 
+    private void proyectar(int x, int y) {
+        puntosXY.add(new Puntos(x, y));
+
+        int[][] cara = {
+            { puntosXY.get(0).x, puntosXY.get(0).y },
+            { puntosXY.get(1).x, puntosXY.get(1).y },
+            { puntosXY.get(5).x, puntosXY.get(5).y },
+            { puntosXY.get(4).x, puntosXY.get(4).y }
+        };
+
+        int[][] cara2 = {
+            { puntosXY.get(0).x, puntosXY.get(0).y },
+            { puntosXY.get(4).x, puntosXY.get(4).y },
+            { puntosXY.get(6).x, puntosXY.get(6).y },
+            { puntosXY.get(2).x, puntosXY.get(2).y }
+        };
+
+        int[][] cara3 = {
+            { puntosXY.get(4).x, puntosXY.get(4).y },
+            { puntosXY.get(5).x, puntosXY.get(5).y },
+            { puntosXY.get(7).x, puntosXY.get(7).y },
+            { puntosXY.get(6).x, puntosXY.get(6).y }
+        };
+        puntosXY.clear();
     }
 
     private double calcularUParalela(double z, int zp) {
@@ -47,18 +70,20 @@ public class Dibujo extends JPanel implements Runnable {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        calcularMovimiento();
+        drawCube();
         g.drawImage(image, 0, 0, this);
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (tx<50) {
             
             try {
+                tx+=1;
+                ty-=1;
+                tz=1;
                 repaint();
-                System.out.println("Tick");
-                Thread.sleep(100); 
+                Thread.sleep(500); 
             } catch (InterruptedException e) {
                 e.getStackTrace();
             }
