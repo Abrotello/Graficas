@@ -1,8 +1,8 @@
 public class Cubo {
     /*                         A   B   C   D   E   F   G   H               */
-    private int[] puntosX = { 10, 10, 30, 30, 10, 10, 30, 30 };
-    private int[] puntosY = { 10, 30, 10, 30, 10, 30, 10, 30 };
-    private int[] puntosZ = { 10, 10, 10, 10, 30, 30, 30, 30 };
+    private int[] puntosX = { 50, 150, 50, 150, 50, 150, 50, 150 };
+    private int[] puntosY = { 150, 150, 250, 250, 150, 150, 250, 250 };
+    private int[] puntosZ = { 150, 150, 150, 150, 250, 250, 250, 250 };
 
     public int[] getPuntosX() {
         return this.puntosX;
