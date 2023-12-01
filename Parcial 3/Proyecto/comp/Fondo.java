@@ -2,14 +2,36 @@ package comp;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import coords.*;
+import lib.*;
+
 public class Fondo extends JPanel implements Runnable {
 
-    BufferedImage fondo;
-    
+    private BufferedImage fondo;
+
+
+
+    //Calculos
+    private int[] vectorProyeccion = { 50, 0, 50 };
+    private ArrayList<Puntos> puntosXY = new ArrayList<Puntos>();
+    private BufferedImage buffer = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+    private Graficos2D graficos2d = new Graficos2D(buffer);
+
     public Fondo() {}
+
+    private void dibujarRieles() {
+        Rieles rieles = new Rieles();
+        Tablas tablas = new Tablas();
+
+    }
+
+    private void dibujarEdificios() {
+        Edificios edificios = new Edificios();
+    }
 
 
     private void dibujarFondo(Graphics g) {
@@ -18,7 +40,8 @@ public class Fondo extends JPanel implements Runnable {
 
             fondo = new BufferedImage(1280, 720, BufferedImage.TYPE_INT_RGB);
 
-            //Dibujar fondo
+            dibujarRieles();
+            dibujarEdificios();
 
         }
 
@@ -43,7 +66,6 @@ public class Fondo extends JPanel implements Runnable {
             try {
                 repaint();
                 Thread.sleep(50);
-                //System.out.println("Tick");
             } catch (InterruptedException e) {
                 e.getStackTrace();
             }

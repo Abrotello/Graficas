@@ -1,3 +1,5 @@
+package lib;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -142,25 +144,109 @@ public class Graficos2D {
         }
     }
 
-    public void fillRect(int x1, int y1, int x2, int y2, Color relleno) {
+    public void fillRect(int x1, int y1, int x2, int y2, Color relleno, BufferedImage image) {
         y1 += 1;
         x2 -= 1;
         while(y1 < y2) {
-            paintLine(x1, y1, x2, y1, relleno, imagen);
+            paintLine(x1, y1, x2, y1, relleno, image);
             y1++;
         }
+    }
+
+    public void fillPolygon(int[][] figura, Color c, BufferedImage buffer) {
+        int n = figura.length;
+        int startX = Integer.MAX_VALUE;
+        int startY = Integer.MAX_VALUE;
+        int endX = Integer.MIN_VALUE;
+        int endY = Integer.MIN_VALUE;
+        this.imagen = buffer;
+
+        for (int i = 0; i < n - 1; i++) {
+            int x = figura[i][0];
+            int y = figura[i][1];
+            startX = Math.min(startX, x);
+            startY = Math.min(startY, y);
+            endX = Math.max(endX, x);
+            endY = Math.max(endY, y);
+        }
+
+        int direction = 0; // 0: right, 1: down, 2: left, 3: up
+        int x = startX;
+        int y = startY;
+
+        while (startX <= endX && startY <= endY) {
+            while (x >= startX && x <= endX && y >= startY && y <= endY) {
+                if (isInsideFigure(x, y, figura)) {
+                    putPixel(x, y, c);
+                }
+
+                switch (direction) {
+                    case 0:
+                        x++;
+                        break;
+                    case 1:
+                        y++;
+                        break;
+                    case 2:
+                        x--;
+                        break;
+                    case 3:
+                        y--;
+                        break;
+                }
+            }
+
+            switch (direction) {
+                case 0:
+                    startY++;
+                    x--;
+                    y++;
+                    break;
+                case 1:
+                    endX--;
+                    x--;
+                    y--;
+                    break;
+                case 2:
+                    endY--;
+                    x++;
+                    y--;
+                    break;
+                case 3:
+                    startX++;
+                    x++;
+                    y++;
+                    break;
+            }
+
+            direction = (direction + 1) % 4;
+        }
+
+    }
+
+    private boolean isInsideFigure(int x, int y, int[][] figura) {
+
+        int longitud = figura.length;
+        boolean isInside = false;
+
+
+        for (int i = 0, j = longitud - 1; i < longitud; j = i++) {
+            int xi = figura[i][0];
+            int yi = figura[i][1];
+            int xj = figura[j][0];
+            int yj = figura[j][1];
+
+            if (((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
+                isInside = !isInside;
+            }
+        }
+
+        return isInside;
     }
 
     private void putPixel(int x, int y, Color c) {
         buffer.setRGB(0, 0, c.getRGB());
         gImagen = imagen.getGraphics();
         gImagen.drawImage(buffer, x, y, null);
-    }
-
-    public static void setPixel(int x, int y, Color c, BufferedImage bufferedImage) {
-        BufferedImage buffer = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-        buffer.setRGB(0, 0, c.getRGB());
-        Graphics lapiz = bufferedImage.getGraphics();
-        lapiz.drawImage(buffer, x, y, null);
     }
 }
