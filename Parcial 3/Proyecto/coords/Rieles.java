@@ -3,7 +3,7 @@ package coords;
 public class Rieles {
     /*                         A    B     C    D  Limite                     */
     private int[] puntosX = { 400, 450, 800, 850, 640 };
-    private int[] puntosY = { 500, 500, 500, 500, 0};
+    private int[] puntosY = { 600, 600, 600, 600, 5};
     private int[] puntosZ = { 10,  10,  10, 10, 0};
 
     public int[] getPuntosX() {
