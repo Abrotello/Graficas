@@ -17,7 +17,7 @@ public class Ventana extends JFrame {
         setResizable(false);
         executorService.submit(fondo);
         add(fondo);
-        setSize(1280, 720);
+        setSize(1280, 600);
         setLocationRelativeTo(null);
         setVisible(true);
 

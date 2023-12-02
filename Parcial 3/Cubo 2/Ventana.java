@@ -8,11 +8,11 @@ import javax.swing.JPanel;
 public class Ventana extends JPanel {
     
     private BufferedImage image;
-    private int[] vectorProyeccion = { 20, 20, 800 };
+    private int[] vectorProyeccion = { 20, 20, 50 };
 
-    private int xcentro = 150;
-    private int ycentro = 150;
-
+    int xcentro = 100;
+    int ycentro = 100;
+    
     Color color1 = Color.WHITE;
     Color color2 = Color.GREEN;
     
@@ -50,11 +50,11 @@ public class Ventana extends JPanel {
             System.out.println("y: " + y + "\n");
 
             if(i < 4) {
-                figuraX1[i] = (int) ((x*1)); 
-                figuraY1[i] = (int) ((y*1));
+                figuraX1[i] = (int) (xcentro + x*6); 
+                figuraY1[i] = (int) (ycentro + y*6);
             } else {
-                figuraX2[aux] = (int) ((x*1));
-                figuraY2[aux] = (int) ((y*1));
+                figuraX2[aux] = (int) (xcentro + x*6);
+                figuraY2[aux] = (int) (ycentro + y*6);
                 aux++;
             }
         }
