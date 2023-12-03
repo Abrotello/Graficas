@@ -2,8 +2,8 @@ package coords;
 
 public class Tablas {
 
-    private int[] puntosX = { 350, 350, 410, 920, 920, 860 };
-    private int[] puntosY = { 550, 530, 500, 550, 530, 500 }; 
+    private int[] puntosX = { 350, 350, 370, 930, 930, 910 };
+    private int[] puntosY = { 550, 530, 515, 550, 530, 515 }; 
     private int[] puntosZ = { 10, 10, 10, 10, 10, 10 };
 
     public int[][] cara;
