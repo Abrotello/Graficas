@@ -10,20 +10,26 @@ public class Curvas {
         this.buffer = buffer_;
     }
 
-    public BufferedImage curva100pts(BufferedImage imagen, int xInicial, int yInicial, int amplitud, int longitud, Color color) {
+    public BufferedImage curva100pts(BufferedImage imagen, int xInicial, int yInicial, int amplitud, int longitud, Color color, int puntos) {
         double rangoInicial = 0;
         double rangoFinal = Math.PI;
 
-        final int PUNTOS = 200;
-        final double PASOS = (rangoFinal - rangoInicial) / (PUNTOS);
+        final double PASOS = (rangoFinal - rangoInicial) / (puntos);
 
-        int[] puntosX = new int[PUNTOS+1];
-        int[] puntosY = new int[PUNTOS+1];
+        int[] puntosX = new int[puntos+1];
+        int[] puntosY = new int[puntos+1];
 
         BufferedImage buffer = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
+
+        for(int i=0; i<buffer.getWidth(); i++) {
+            for(int j=0; j<buffer.getHeight(); j++) {
+                buffer.setRGB(i, j, color.getRGB());
+            }
+        }
+
         Graficos2D curva = new Graficos2D(buffer);
 
-        for(int i=0; i<=PUNTOS; i++) {
+        for(int i=0; i<=puntos; i++) {
             double x = (rangoInicial + PASOS * i) ;
             double y = (Math.sin(x)) * -1;
 
@@ -33,7 +39,7 @@ public class Curvas {
 
         int j=0;
 
-        while(j < PUNTOS) {
+        while(j < puntos) {
             curva.paintLine(puntosX[j], puntosY[j], puntosX[j+1], puntosY[j+1], color, imagen);
             j++;
         }

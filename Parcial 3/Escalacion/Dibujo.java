@@ -9,7 +9,7 @@ public class Dibujo extends JPanel implements Runnable {
     BufferedImage image = null;
 
     int[] vectorProyeccion = { 8, 7, 20 };
-    private float tx, ty, tz;
+    private float sx, sy, sz;
 
     //Puntos finales
     int[][] puntosFinales = new int[8][0];
@@ -23,10 +23,11 @@ public class Dibujo extends JPanel implements Runnable {
     
     private void dibujarCubo() {
         Cubo cubo = new Cubo();
-        Transformacion3D transformacion3d = new Transformacion3D(tx, ty, tz);
+        Transformacion3D transformacion3d = new Transformacion3D(sx, sy, sz);
     
         for(int i=0; i<puntosFinales.length; i++) {
             puntosFinales[i] = transformacion3d.escalar(cubo.getPuntosX()[i], cubo.getPuntosY()[i], cubo.getPuntosZ()[i]);
+            //  puntosFinales[i] = escalacion3d.trasladar(cubo.getPuntosX()[i], cubo.getPuntosY()[i], cubo.getPuntosZ()[i]);
             double u = calcularUParalela(puntosFinales[i][2], vectorProyeccion[2]);
             double x = calcularXParalela(puntosFinales[i][0], u, vectorProyeccion[0]);
             double y = calcularYParalela(puntosFinales[i][1], u, vectorProyeccion[1]);
@@ -90,14 +91,14 @@ public class Dibujo extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        while (tx<1.5) {
+        while (sy<2) {
             
             try {
-                tx+=0.001;
-                ty+=0.001;
-                tz=1;
+                sx+=0.0015;
+                sy+=0.001;
+                sz=1;
                 repaint();
-                Thread.sleep(5); 
+                Thread.sleep(1); 
             } catch (InterruptedException e) {
                 e.getStackTrace();
             }

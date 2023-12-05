@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
 import javax.swing.JPanel;
 
 import coords.*;
@@ -15,13 +16,15 @@ public class Fondo extends JPanel implements Runnable {
     private BufferedImage cielo = null;
     private BufferedImage animacion = null;
     private Graphics gAnimacion;
+
     
-
-
+    //Traslacion
+    private float tx, ty, tz;
+    //Escalacion
+    
     //Calculos
-    private int[] vectorProyeccion = { 8, 7, 50 };
+    private int[] vectorProyeccion = { 0, 0, 50 };
     
-
     public Fondo() {}
 
     private void dibujarRieles() {
@@ -60,14 +63,13 @@ public class Fondo extends JPanel implements Runnable {
         };
         graficos2d.fillPolygon(riel2, gris, fondo);
         graficos2d.floodFillCircle(640, 5,5, fondo, Color.BLACK);
-        dibujarNubes();
     }
 
     private void dibujarNubes() {
         BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
         Graficos2D graficos2d = new Graficos2D(bufferedImage);
         int separacion = 0;
-        for(int i=0; i<6; i++) {
+        for(int i=0; i<7; i++) {
             graficos2d.floodFillCircle(separacion + 50, 45, 15, cielo, Color.WHITE);
             graficos2d.floodFillCircle(separacion + 65, 40, 17, cielo, Color.WHITE);
             graficos2d.floodFillCircle(separacion + 65, 50, 17, cielo, Color.WHITE);
@@ -75,10 +77,6 @@ public class Fondo extends JPanel implements Runnable {
             
             separacion += 200;
         }
-
-        Curvas sol = new Curvas(bufferedImage);
-        sol.sol(cielo, 1220, 40, 2, 2, Color.YELLOW);
-        graficos2d.floodFillCircle(1220, 40, 25, cielo, Color.ORANGE);
     }
 
     private void dibujarTablas() {
@@ -149,18 +147,80 @@ public class Fondo extends JPanel implements Runnable {
         dibujarRieles();
     }
     
-    private void dibujarEdificios() {
-        Edificios edificios = new Edificios();
+    private void dibujarCarteles() {
+        Color maderaOscuro = new Color(48, 33, 8);
+        Color madera = new Color(139, 96, 23);
+        Carteles carteles = new Carteles();
+        ArrayList<Puntos> puntosXY = new ArrayList<Puntos>();
+        BufferedImage buffer = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        Graficos2D graficos2d = new Graficos2D(buffer);
+        Graficos3D graficos3d = new Graficos3D();
+
+        for(int i=0; i<carteles.getPuntosX().length; i++) {
+            double u = graficos3d.calcularUParalela(carteles.getPuntosZ()[i], vectorProyeccion[2]);
+            double x = graficos3d.calcularXParalela(carteles.getPuntosX()[i], u, vectorProyeccion[0]);
+            double y = graficos3d.calcularYParalela(carteles.getPuntosY()[i], u, vectorProyeccion[1]);
+
+            puntosXY.add(new Puntos((int)x, (int)y));
+        }
+
+        int[][] cara = {
+            { puntosXY.get(3).x, puntosXY.get(3).y }, 
+            { puntosXY.get(2).x, puntosXY.get(2).y },
+            { puntosXY.get(0).x, puntosXY.get(0).y },
+            { puntosXY.get(1).x, puntosXY.get(1).y }
+        };
+        
+        graficos2d.fillPolygon(cara, madera, fondo);
+    
+        int[][] cara2 = {
+            { puntosXY.get(5).x, puntosXY.get(5).y }, 
+            { puntosXY.get(4).x, puntosXY.get(4).y },
+            { puntosXY.get(2).x, puntosXY.get(2).y },
+            { puntosXY.get(3).x, puntosXY.get(3).y }
+        };
+
+        graficos2d.fillPolygon(cara2, maderaOscuro, fondo);
+
+        int[][] cara3 = {
+            { puntosXY.get(5).x, puntosXY.get(5).y }, 
+            { puntosXY.get(3).x, puntosXY.get(3).y },
+            { puntosXY.get(1).x, puntosXY.get(1).y },
+            { puntosXY.get(6).x, puntosXY.get(6).y }
+        };
+        
+        graficos2d.fillPolygon(cara3, maderaOscuro, fondo);
+
+        int cara4[][] = {
+            { puntosXY.get(8).x, 230 },
+            { puntosXY.get(7).x, 230 },
+            { puntosXY.get(7).x, puntosXY.get(7).y },
+            { puntosXY.get(8).x, puntosXY.get(8).y }
+        };
+
+        graficos2d.fillPolygon(cara4, maderaOscuro, fondo);
+
     }
 
     private void dibujarCerros() {
+        Color cerro = new Color(5, 61, 22);
+        BufferedImage buffer = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        Curvas montanas = new Curvas(buffer);
 
+        int separacion = 0;
+        for(int i=0; i<4; i++) {
+            montanas.curva100pts(cielo, 30 + separacion, 200, 40, 30, cerro, 2);
+            montanas.curva100pts(cielo, 150 + separacion, 200, 30, 20, cerro, 2);
+            montanas.curva100pts(cielo, 240 + separacion, 200, 30, 20, cerro, 2);
+            
+            separacion += 295;
+        }
     }
 
     private void dibujarAnimacion() {
-        
+        Aviones avion = new Aviones();
+        animacion = avion.dibujarAvion(animacion, tx, ty, tz);
     }
-
 
     private void dibujarFondo(Graphics g) {
 
@@ -185,7 +245,8 @@ public class Fondo extends JPanel implements Runnable {
             }
 
             dibujarTablas();
-            dibujarEdificios();
+            dibujarCarteles();
+            dibujarNubes();
             dibujarCerros();
 
         }
@@ -213,17 +274,26 @@ public class Fondo extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        
+
         while (true) {
 
+            tx += 0.5;
+            ty += 0.05;
+            tz=1;
+        
+            if(tx == 5100) {
+                tx = 0;
+                ty = 0;
+                tz = 0;
+            }
+
             try {
+
                 repaint();
-                Thread.sleep(50);
+                Thread.sleep(3);
             } catch (InterruptedException e) {
                 e.getStackTrace();
             }
-
         }
-
     }
 }

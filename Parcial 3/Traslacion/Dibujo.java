@@ -93,8 +93,8 @@ public class Dibujo extends JPanel implements Runnable {
         while (tx<500) {
             
             try {
-                tx+=1;
-                ty=1;
+                tx=1;
+                ty+=1;
                 tz=1;
                 repaint();
                 Thread.sleep(10); 
