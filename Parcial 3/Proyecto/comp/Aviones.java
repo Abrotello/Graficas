@@ -17,14 +17,14 @@ public class Aviones {
     
     BufferedImage buffer = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
     Graficos2D graficos2d = new Graficos2D(buffer);
-
-    ArrayList<Puntos> puntosXY = new ArrayList<Puntos>();
-    ArrayList<Puntos> puntosXY2 = new ArrayList<Puntos>();
+    ArrayList<Puntos> puntosXY;
     Graficos3D graficos3d = new Graficos3D();
 
-    public Aviones() {}
+    public Aviones(ArrayList<Puntos> puntosXY) {
+        this.puntosXY = puntosXY;
+    }
 
-    public BufferedImage dibujarAvion(BufferedImage image, float tx, float ty, float tz) {
+    public BufferedImage dibujarAvion(BufferedImage image, float tx, float ty, float tz, Color c1, Color c2, int posX, int posY, int reductor, int reductor2) {
         Avion avion = new Avion();
         Transformacion3D traslacion = new Transformacion3D(tx*-1, ty, tz);
 
@@ -34,12 +34,10 @@ public class Aviones {
             double x = graficos3d.calcularXPerspectiva(puntosFinales[i][0], u, vectorProyeccion[0]);
             double y = graficos3d.calcularYPerspectiva(puntosFinales[i][1], u, vectorProyeccion[1]);
 
-            puntosXY.add(new Puntos((int)((x/2) + 1000), (int)((y/2) - 20)));
-            puntosXY2.add(new Puntos((int)((x/4) + 1000), (int)(y/4) + 40));
+            puntosXY.add(new Puntos((int)((x/reductor) + posX), (int)((y/reductor2) - posY)));
         }
 
-        dibujarCaras(puntosXY2, image, Color.GRAY, Color.GREEN);
-        dibujarCaras(puntosXY, image, Color.BLACK, Color.BLUE);
+        dibujarCaras(puntosXY, image, c1, c2);
         
 
         return image;

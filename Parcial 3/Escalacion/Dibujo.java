@@ -91,14 +91,14 @@ public class Dibujo extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        while (sy<2) {
+        while (sz<10) {
             
             try {
-                sx+=0.0015;
-                sy+=0.001;
-                sz=1;
+                sx=1;
+                sy=1;
+                sz+=0.001;
                 repaint();
-                Thread.sleep(1); 
+                Thread.sleep(5); 
             } catch (InterruptedException e) {
                 e.getStackTrace();
             }

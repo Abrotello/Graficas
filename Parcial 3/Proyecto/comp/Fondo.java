@@ -17,13 +17,19 @@ public class Fondo extends JPanel implements Runnable {
     private BufferedImage animacion = null;
     private Graphics gAnimacion;
 
+    int contador = 0;
+    int segundos = 0;
+    int minutos = 0;
     
     //Traslacion
     private float tx, ty, tz;
     //Escalacion
-    
+    private float sx = (float)0.5, sy, sz;
     //Calculos
-    private int[] vectorProyeccion = { 0, 0, 50 };
+    private int[] vectorProyeccion = { 640, 0, 50 };
+
+    private boolean bandera = false;
+    private int temp = 0;
     
     public Fondo() {}
 
@@ -218,8 +224,21 @@ public class Fondo extends JPanel implements Runnable {
     }
 
     private void dibujarAnimacion() {
-        Aviones avion = new Aviones();
-        animacion = avion.dibujarAvion(animacion, tx, ty, tz);
+        ArrayList<Puntos> puntosAvion1 = new ArrayList<Puntos>();
+        Aviones avion = new Aviones(puntosAvion1);
+        Trenes tren = new Trenes();
+
+        if(minutos < 2) {
+            animacion = avion.dibujarAvion(animacion, tx, ty, tz, Color.RED, Color.WHITE, 1200, -80, 5, 5);
+            animacion = avion.dibujarAvion(animacion, tx, ty, tz, Color.YELLOW, Color.BLACK, 1500, -50, 3, 4);
+            animacion = avion.dibujarAvion(animacion, tx, ty, tz, Color.GRAY, Color.BLACK, 1200, -50, 3, 4);
+            animacion = avion.dibujarAvion(animacion, tx, ty, tz, Color.BLACK, Color.BLUE, 1200, 10, 2, 2);
+        }
+        
+        if(bandera) {
+            animacion = tren.dibujarTren(animacion, sx, sy, sz);
+        }
+
     }
 
     private void dibujarFondo(Graphics g) {
@@ -274,23 +293,68 @@ public class Fondo extends JPanel implements Runnable {
 
     @Override
     public void run() {
-
-        while (true) {
-
-            tx += 0.5;
-            ty += 0.05;
-            tz=1;
         
-            if(tx == 5100) {
-                tx = 0;
-                ty = 0;
-                tz = 0;
+
+        while (minutos < 2) {
+
+            if(contador == 100) {
+                segundos++;
+                contador=0;
+                System.out.println(segundos);
+            }
+            contador++;
+            
+            if(segundos == 60) {
+                minutos++;
+                segundos = 0;
+                contador = 0;
+                System.out.println(minutos);
             }
 
-            try {
+            if(segundos == 40) {
+                tx=0;
+                ty=0;
+                tz=0;
+                temp++;
+                bandera = true;
+            }
 
+            if(temp == 40) {
+                bandera = false;
+            }
+
+            if(!bandera) {
+                sx=0;
+                sy=0;
+                sz=0;
+            } else if(bandera) {
+                 if(sy > 0.8 && sy < 1.6) {
+                    sx = (float)0.75;
+                } else if(sy > 1.6 && sy < 2.5) {
+                    sx = (float)1.125;
+                } else if(sy > 2.5 && sy < 4.1) {
+                    sx = (float)1.6875;
+                } else if(sy > 4.1 && sy < 5.6) {
+                    sx = (float)2.53125;
+                } else if(sy > 5.6 && sy < 7.8) {
+                    sx = (float)3.796875;
+                } else if(sy > 7.8 && sy < 11) {
+                    sx = (float)5.6953125;
+                } else if (sy > 14){
+                    sx = (float)8.5;
+                }
+                
+                sy += 0.01;
+                sz = 1;
+            }
+
+            tx+=1.8;
+            ty+=0.05;
+            tz=1;
+
+            try {
                 repaint();
-                Thread.sleep(3);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.getStackTrace();
             }
